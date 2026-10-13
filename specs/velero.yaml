@@ -1,0 +1,104 @@
+apiVersion: kots.io/v1beta2
+kind: HelmChart
+metadata:
+  name: velero
+spec:
+  chart:
+    name: velero
+    chartVersion: 12.1.0
+  releaseName: velero
+  namespace: velero
+  weight: -100
+  values:
+    serviceAccount:
+      server:
+        create: true
+        name: velero
+    extraVolumes:
+      - name: web-identity
+        projected:
+          sources:
+            - serviceAccountToken:
+                expirationSeconds: 3600
+                path: token
+    extraVolumeMounts:
+      - name: web-identity
+        mountPath: /var/run/secrets/aws
+        readOnly: true
+    image:
+      repository: '{{repl ReplicatedImageName "docker.io/velero/velero" true }}'
+      tag: v1.18.2
+    initContainers:
+    - name: velero-plugin-for-aws
+      image: '{{repl ReplicatedImageName "docker.io/velero/velero-plugin-for-aws:v1.14.2" true }}'
+      volumeMounts:
+      - name: plugins
+        mountPath: /target
+    credentials:
+      useSecret: false
+    backupsEnabled: false
+    snapshotsEnabled: false
+    deployNodeAgent: true
+    nodeAgent:
+      podVolumePath: /var/lib/ec/kubelet/pods
+      pluginVolumePath: /var/lib/ec/kubelet/plugins
+      extraVolumes:
+        - name: web-identity
+          projected:
+            sources:
+              - serviceAccountToken:
+                  expirationSeconds: 3600
+                  path: token
+      extraVolumeMounts:
+        - name: web-identity
+          mountPath: /var/run/secrets/aws
+          readOnly: true
+    configuration:
+      defaultVolumesToFsBackup: true
+      extraEnvVars:
+        - name: AWS_EC2_METADATA_DISABLED
+          value: "true"
+    metrics:
+      serviceMonitor:
+        enabled: false
+        autodetect: false
+    configMaps:
+      pr591-modifiers:
+        data:
+          resource-modifiers.yaml: "version: v1\nresourceModifierRules:\n  - conditions:\n\
+            \      groupResource: configmaps\n      resourceNameRegex: \"^alpine-dr-restore-test$\"\
+            \n      labelSelector:\n        matchLabels:\n          dr-test: restore\n\
+            \    patches:\n      - operation: replace\n        path: /data/state\n   \
+            \     value: restored-by-pr591\n"
+  builder:
+    backupsEnabled: false
+    configuration:
+      defaultVolumesToFsBackup: true
+    credentials:
+      useSecret: false
+    deployNodeAgent: true
+    image:
+      repository: docker.io/velero/velero
+      tag: v1.18.2
+    initContainers:
+    - image: docker.io/velero/velero-plugin-for-aws:v1.14.2
+      name: velero-plugin-for-aws
+      volumeMounts:
+      - mountPath: /target
+        name: plugins
+    metrics:
+      serviceMonitor:
+        autodetect: false
+        enabled: false
+    nodeAgent:
+      pluginVolumePath: /var/lib/ec/kubelet/plugins
+      podVolumePath: /var/lib/ec/kubelet/pods
+    snapshotsEnabled: false
+    configMaps:
+      pr591-modifiers:
+        data:
+          resource-modifiers.yaml: "version: v1\nresourceModifierRules:\n  - conditions:\n\
+            \      groupResource: configmaps\n      resourceNameRegex: \"^alpine-dr-restore-test$\"\
+            \n      labelSelector:\n        matchLabels:\n          dr-test: restore\n\
+            \    patches:\n      - operation: replace\n        path: /data/state\n   \
+            \     value: restored-by-pr591\n"

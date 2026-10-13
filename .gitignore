@@ -1,0 +1,8 @@
+/manifests/
+/charts/*/charts/
+*.tgz
+!/vendor/velero-12.1.0.tgz
+/.venv/
+__pycache__/
+.DS_Store
+/.build/

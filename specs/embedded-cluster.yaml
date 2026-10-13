@@ -1,0 +1,12 @@
+# PR #591 testing requires an EC build containing that change.
+apiVersion: embeddedcluster.replicated.com/v1beta1
+kind: Config
+metadata:
+  name: embedded-cluster
+spec:
+  version: 3.14.0-beta.1+k8s-1.36
+  roles:
+    controller:
+      name: controller
+    custom:
+    - name: worker

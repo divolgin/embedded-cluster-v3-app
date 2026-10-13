@@ -1,0 +1,17 @@
+# Vendor policy template consumed by EC PR #591; not applied as a live Backup.
+apiVersion: velero.io/v1
+kind: Backup
+metadata:
+  name: alpine-sleeper
+spec:
+  includedNamespaces:
+    - 'repl{{ Namespace }}'
+  orLabelSelectors:
+    - matchExpressions:
+        - key: dr-test
+          operator: NotIn
+          values: [exclude]
+    - matchLabels:
+        embeddedcluster.replicated.com/recovery: "true"
+  defaultVolumesToFsBackup: true
+  snapshotVolumes: false

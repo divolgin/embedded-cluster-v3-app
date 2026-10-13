@@ -1,0 +1,44 @@
+# Use the SAME storage and repository credentials as backup. No schedules during restore.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: cloud-credentials
+  namespace: velero
+type: Opaque
+stringData:
+  cloud: '[default]
+
+    aws_access_key_id=REPLACE_ME
+
+    aws_secret_access_key=REPLACE_ME
+
+    '
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: velero-repo-credentials
+  namespace: velero
+type: Opaque
+stringData:
+  repository-password: REPLACE_WITH_A_PERSISTENT_REPOSITORY_PASSWORD
+---
+apiVersion: velero.io/v1
+kind: BackupStorageLocation
+metadata:
+  name: default
+  namespace: velero
+spec:
+  provider: aws
+  default: true
+  objectStorage:
+    bucket: application-backups
+    prefix: production
+  credential:
+    name: cloud-credentials
+    key: cloud
+  config:
+    region: us-east-1
+    s3Url: https://s3.example.com
+    s3ForcePathStyle: 'true'
+  accessMode: ReadOnly

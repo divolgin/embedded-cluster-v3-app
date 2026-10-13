@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-sleeper
+  labels:
+    app.kubernetes.io/name: alpine-sleeper
+    app.kubernetes.io/instance: alpine-sleeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alpine-sleeper
+      app.kubernetes.io/instance: alpine-sleeper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alpine-sleeper
+        app.kubernetes.io/instance: alpine-sleeper
+    spec:
+      containers:
+        - name: alpine
+          image: {{ .Values.image | quote }}
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              while true; do
+                printf '%s\n' "$MESSAGE"
+                date -u '+%Y-%m-%dT%H:%M:%SZ' > /data/timestamp.txt
+                sleep "$INTERVAL_SECONDS"
+              done
+          env:
+            - name: MESSAGE
+              value: {{ .Values.message | toString | quote }}
+            - name: INTERVAL_SECONDS
+              value: {{ .Values.intervalSeconds | toString | quote }}
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 1m
+              memory: 8Mi
+            limits:
+              cpu: 100m
+              memory: 32Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: alpine-sleeper-data

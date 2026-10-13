@@ -1,0 +1,3 @@
+message: "Hello from Alpine!"
+intervalSeconds: "10"
+image: docker.io/library/alpine:3.23.5

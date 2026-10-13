@@ -1,0 +1,23 @@
+apiVersion: kots.io/v1beta2
+kind: HelmChart
+metadata:
+  name: alpine-sleeper
+spec:
+  chart:
+    name: alpine-sleeper
+    chartVersion: 0.10.0
+  releaseName: alpine-sleeper
+  values:
+    message: '{{repl ConfigOption "message" }}'
+    intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
+    image: '{{repl ReplicatedImageName "docker.io/library/alpine:3.23.5" true }}'
+    replicated:
+      image:
+        registry: '{{repl ReplicatedImageRegistry "proxy.replicated.com" }}'
+  builder:
+    image: docker.io/library/alpine:3.23.5
+    replicated:
+      image:
+        registry: proxy.replicated.com
+        repository: library/replicated-sdk-image
+        tag: "1.19.11"

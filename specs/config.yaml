@@ -1,0 +1,23 @@
+apiVersion: kots.io/v1beta1
+kind: Config
+metadata:
+  name: alpine-config
+spec:
+  groups:
+    - name: output
+      title: Pod output
+      items:
+        - name: message
+          title: Message
+          type: text
+          default: Hello from Alpine!
+          required: true
+        - name: interval_seconds
+          title: Interval (seconds)
+          type: text
+          default: "10"
+          required: true
+          validation:
+            regex:
+              pattern: '^[1-9][0-9]*$'
+              message: Enter a positive whole number of seconds.

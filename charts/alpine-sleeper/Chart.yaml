@@ -1,0 +1,10 @@
+apiVersion: v2
+name: alpine-sleeper
+description: An Alpine container that prints a configurable message at a configurable interval.
+type: application
+version: 0.10.0
+appVersion: "3.23.5"
+dependencies:
+  - name: replicated
+    repository: oci://proxy.replicated.com/library
+    version: "1.19.11"

@@ -1,0 +1,6 @@
+dependencies:
+- name: replicated
+  repository: oci://proxy.replicated.com/library
+  version: 1.19.11
+digest: sha256:25c576e012de5a5145983f9c5fef36f9cf53b391bfe66dedc6267ca27e126ad9
+generated: "2026-09-14T13:07:46.140118-07:00"

@@ -1,0 +1,11 @@
+# EC saves this template in the recovery Secret and supplies backupName at restore time.
+apiVersion: velero.io/v1
+kind: Restore
+metadata:
+  name: alpine-sleeper
+spec:
+  includedNamespaces:
+    - 'repl{{ Namespace }}'
+  resourceModifier:
+    kind: ConfigMap
+    name: velero-pr591-modifiers

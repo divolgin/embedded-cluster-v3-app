@@ -1,0 +1,25 @@
+apiVersion: kots.io/v1beta1
+kind: Application
+metadata:
+  name: alpine-ec-v3
+spec:
+  title: Alpine Embedded Cluster v3
+  statusInformers:
+  - deployment/replicated
+  - deployment/alpine-sleeper
+  releaseNotes: 'Disaster recovery via native Velero backups and S3-compatible storage
+    (EC PR #577).
+
+    Packages Velero 1.18.2 and AWS plugin 1.14.2 using chart 12.1.0.
+
+    Preserves configurable Alpine output, SDK 1.19.11, and worker-node support.
+
+    Adds a 1 GiB Alpine PVC with a timestamp file overwritten every configured interval.
+
+    Adds EC v3 air gap image rewriting for Alpine, SDK, Velero, and the AWS plugin.
+
+    Exercises PR #591 vendor Backup/Restore policies, backup filtering, and a restore resource modifier.
+
+    Requires an EC build containing PR #591. Prototype DR backups are not compatible.
+
+    '
