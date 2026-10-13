@@ -1,0 +1,23 @@
+.github/workflows/release.yml
+  s_d70247146adf1e::t_6355170af61d84 1-41
+.gitignore
+  s_d70247146adf1e::t_874c502bc84739 1-8
+.replicated
+  s_d70247146adf1e::t_b85e5e56f4fe1b 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "13f02f8639ac795d4f78833fcda12d86fc4d48e5",
+  "prompts": {},
+  "sessions": {
+    "s_d70247146adf1e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a0913e-1b38-7c60-89c0-1517e4b2df72",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
