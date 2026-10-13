@@ -1,0 +1,19 @@
+.github/workflows/release.yml
+  s_d9d5f1dd97c96e::t_32ec79dc724c22 15-16,19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "76cd0589dc282eb5fcae1068ded6bfed6dc847ab",
+  "prompts": {},
+  "sessions": {
+    "s_d9d5f1dd97c96e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13679-5113-7cf3-9178-20de738c6373",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
