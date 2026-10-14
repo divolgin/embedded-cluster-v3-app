@@ -1,0 +1,23 @@
+specs/velero.yaml
+  s_1f6bf00e0314e1::t_cdaa9c78d860db 29,33
+specs/alpine-sleeper.yaml
+  s_1f6bf00e0314e1::t_cdaa9c78d860db 13,18
+specs/kots-app.yaml
+  s_1f6bf00e0314e1::t_cdaa9c78d860db 20
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a30a254fc1833eadabb14221fb0e4cf64a1f5233",
+  "prompts": {},
+  "sessions": {
+    "s_1f6bf00e0314e1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13b64-4bf2-79a0-bd59-8cc732a85fbb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
