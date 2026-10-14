@@ -21,3 +21,109 @@ spec:
             regex:
               pattern: '^[1-9][0-9]*$'
               message: Enter a positive whole number of seconds.
+    - name: display
+      title: Display and behavior
+      description: Exercise checkboxes, dropdowns, radio buttons, and multiline diffs.
+      items:
+        - name: environment
+          title: Environment
+          type: dropdown
+          default: development
+          items:
+            - name: development
+              title: Development
+            - name: staging
+              title: Staging
+            - name: production
+              title: Production
+        - name: log_level
+          title: Log level
+          type: select_one
+          default: info
+          items:
+            - name: debug
+              title: Debug
+            - name: info
+              title: Info
+            - name: warn
+              title: Warning
+        - name: enable_notifications
+          title: Enable notifications
+          type: bool
+          default: "0"
+        - name: notification_email
+          title: Notification email
+          type: text
+          when: '{{repl ConfigOptionEquals "enable_notifications" "1" }}'
+          required: true
+          validation:
+            regex:
+              pattern: '^[^\s@]+@[^\s@]+\.[^\s@]+$'
+              message: Enter an email address.
+        - name: banner_message
+          title: Message
+          type: text
+          default: Welcome to the config test app.
+          help_text: This label also appears in Pod output; compare item IDs in the diff.
+        - name: extra_settings
+          title: Extra settings
+          type: textarea
+          default: |-
+            feature_alpha=false
+            feature_beta=true
+            region=us-west-2
+          help_text: Change one line, add a line, and remove a line to exercise multiline diffs.
+        - name: enable_advanced
+          title: Show advanced settings
+          type: bool
+          default: "0"
+    - name: credentials
+      title: Credentials
+      description: Test password masking and persistence of generated defaults. Use dummy credentials.
+      items:
+        - name: username
+          title: Username
+          type: text
+          default: test-user
+          required: true
+        - name: password
+          title: Password
+          type: password
+          default: '{{repl RandomString 32 }}'
+          required: true
+          help_text: Generated once. Save unrelated changes and redeploy to check that it stays the same.
+        - name: api_token
+          title: API token
+          type: password
+          help_text: Optional dummy token; test setting, changing, and clearing it.
+    - name: files
+      title: File uploads
+      description: Upload dummy files, then replace one with the same filename and different contents.
+      items:
+        - name: certificate
+          title: Certificate
+          type: file
+          help_text: Optional dummy certificate. The diff should mask its contents.
+        - name: private_key
+          title: Private key
+          type: file
+          help_text: Optional dummy key. Stored in a Secret together with the certificate.
+    - name: advanced
+      title: Advanced settings
+      when: '{{repl ConfigOptionEquals "enable_advanced" "1" }}'
+      description: This entire group is conditional on Show advanced settings in Display and behavior.
+      items:
+        - name: endpoint
+          title: Endpoint
+          type: text
+          default: https://example.com/api
+          required: true
+        - name: advanced_notes
+          title: Extra settings
+          type: textarea
+          help_text: Try long lines, quotes, colons, and blank lines; this label also appears in another group.
+        - name: readonly_summary
+          title: Current environment
+          type: text
+          readonly: true
+          value: '{{repl ConfigOption "environment" }}'

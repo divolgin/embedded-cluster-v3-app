@@ -5,7 +5,7 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.10.0
+    chartVersion: 0.11.0
   releaseName: alpine-sleeper
   values:
     message: '{{repl ConfigOption "message" }}'
@@ -14,6 +14,26 @@ spec:
     replicated:
       image:
         registry: '{{repl ReplicatedImageRegistry "proxy.replicated.com" }}'
+    configTest:
+      public:
+        environment: '{{repl ConfigOption "environment" }}'
+        log_level: '{{repl ConfigOption "log_level" }}'
+        enable_notifications: '{{repl ConfigOption "enable_notifications" }}'
+        notification_email: '{{repl ConfigOption "notification_email" }}'
+        banner_message: '{{repl ConfigOption "banner_message" }}'
+        extra_settings: '{{repl ConfigOption "extra_settings" }}'
+        enable_advanced: '{{repl ConfigOption "enable_advanced" }}'
+        username: '{{repl ConfigOption "username" }}'
+        certificate_filename: '{{repl ConfigOptionFilename "certificate" }}'
+        private_key_filename: '{{repl ConfigOptionFilename "private_key" }}'
+        endpoint: '{{repl ConfigOption "endpoint" }}'
+        advanced_notes: '{{repl ConfigOption "advanced_notes" }}'
+        readonly_summary: '{{repl ConfigOption "readonly_summary" }}'
+      secret:
+        password: '{{repl ConfigOption "password" }}'
+        api_token: '{{repl ConfigOption "api_token" }}'
+        certificate: '{{repl ConfigOption "certificate" }}'
+        private_key: '{{repl ConfigOption "private_key" }}'
   builder:
     image: docker.io/library/alpine:3.23.5
     replicated:
