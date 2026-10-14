@@ -11,9 +11,9 @@ spec:
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
     image: docker.io/library/postgres:17.11-alpine3.23
-    replicated:
-      image:
-        registry: '{{repl ReplicatedImageRegistry "proxy.replicated.com" }}'
+    # replicated:
+    #   image:
+    #     registry: '{{repl ReplicatedImageRegistry "proxy.replicated.com" }}'
     postgres:
       image: docker.io/library/postgres:17.11-alpine3.23
       password: '{{repl ConfigOption "database_password" }}'
