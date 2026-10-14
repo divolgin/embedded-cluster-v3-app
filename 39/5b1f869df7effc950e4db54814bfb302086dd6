@@ -1,0 +1,20 @@
+specs/preflight.yaml
+  s_1f6bf00e0314e1::t_9a16e7b434569d 1-6,9-23
+  s_1f6bf00e0314e1::t_eedcb47f3680ee 7-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "395b1f869df7effc950e4db54814bfb302086dd6",
+  "prompts": {},
+  "sessions": {
+    "s_1f6bf00e0314e1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13b64-4bf2-79a0-bd59-8cc732a85fbb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
