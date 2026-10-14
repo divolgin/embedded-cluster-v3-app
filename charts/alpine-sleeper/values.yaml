@@ -1,6 +1,6 @@
 message: "Hello from Alpine!"
 intervalSeconds: "10"
-image: docker.io/library/alpine:3.23.5
+image: docker.io/library/postgres:17.11-alpine3.23
 
 # Manual Config screen fixtures; these are not consumed by the pod.
 configTest:
@@ -26,3 +26,11 @@ configTest:
     api_token: ''
     certificate: ''
     private_key: ''
+
+postgres:
+  image: docker.io/library/postgres:17.11-alpine3.23
+  # EC replaces this standalone Helm test password with a generated config value.
+  password: alpine-test-password
+  # PostgreSQL needs space for its system catalogs and WAL, even with a tiny table.
+  storage: 128Mi
+  backupStorage: 16Mi

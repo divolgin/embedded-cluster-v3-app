@@ -1,0 +1,156 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: alpine-postgres
+type: Opaque
+data:
+  password: {{ .Values.postgres.password | b64enc | quote }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alpine-postgres-config
+  labels:
+    dr-test: postgres
+data:
+  restore-marker: before-restore
+  init.sh: |
+    #!/bin/sh
+    set -eu
+    # Velero restores the dump volume before this container starts. A normal
+    # restart keeps PGDATA and does not run these initialization scripts again.
+    if [ -s /backups/database.dump ]; then
+      pg_restore --username="$POSTGRES_USER" --dbname="$POSTGRES_DB" \
+        --no-owner --no-privileges --exit-on-error --single-transaction \
+        /backups/database.dump
+    fi
+    psql --username="$POSTGRES_USER" --dbname="$POSTGRES_DB" \
+      --set=ON_ERROR_STOP=1 --set=marker="$RESTORE_MARKER" <<'SQL'
+    CREATE TABLE IF NOT EXISTS timestamps (
+      id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      recorded_at timestamptz NOT NULL DEFAULT clock_timestamp()
+    );
+    CREATE TABLE IF NOT EXISTS restore_events (
+      id bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      recorded_at timestamptz NOT NULL DEFAULT clock_timestamp(),
+      marker text NOT NULL
+    );
+    INSERT INTO restore_events (marker) VALUES (:'marker');
+    SQL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alpine-postgres
+spec:
+  selector:
+    app.kubernetes.io/name: alpine-postgres
+    app.kubernetes.io/instance: alpine-sleeper
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-postgres
+  labels:
+    app.kubernetes.io/name: alpine-postgres
+    app.kubernetes.io/instance: alpine-sleeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alpine-postgres
+      app.kubernetes.io/instance: alpine-sleeper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alpine-postgres
+        app.kubernetes.io/instance: alpine-sleeper
+      annotations:
+        # Back up the consistent logical dump, never a live PGDATA directory.
+        backup.velero.io/backup-volumes-excludes: pgdata
+    spec:
+      securityContext:
+        fsGroup: 70
+      containers:
+        - name: postgres
+          image: {{ .Values.postgres.image | quote }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - postgres
+            - -c
+            - shared_buffers=8MB
+            - -c
+            - max_connections=10
+            - -c
+            - min_wal_size=32MB
+            - -c
+            - max_wal_size=64MB
+            - -c
+            - checkpoint_timeout=30s
+          env:
+            - name: POSTGRES_USER
+              value: alpine
+            - name: POSTGRES_DB
+              value: alpine
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: alpine-postgres
+                  key: password
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: alpine-postgres
+                  key: password
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+            - name: RESTORE_MARKER
+              valueFrom:
+                configMapKeyRef:
+                  name: alpine-postgres-config
+                  key: restore-marker
+          ports:
+            - name: postgres
+              containerPort: 5432
+          startupProbe:
+            exec:
+              command: ["pg_isready", "-h", "127.0.0.1", "-U", "alpine", "-d", "alpine"]
+            periodSeconds: 2
+            failureThreshold: 90
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-h", "127.0.0.1", "-U", "alpine", "-d", "alpine"]
+            periodSeconds: 5
+          volumeMounts:
+            - name: pgdata
+              mountPath: /var/lib/postgresql/data
+            - name: database-backup
+              mountPath: /backups
+            - name: init
+              mountPath: /docker-entrypoint-initdb.d
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+      volumes:
+        - name: pgdata
+          persistentVolumeClaim:
+            claimName: alpine-postgres-data
+        - name: database-backup
+          persistentVolumeClaim:
+            claimName: alpine-postgres-backup
+        - name: init
+          configMap:
+            name: alpine-postgres-config
+            items:
+              - key: init.sh
+                path: init.sh

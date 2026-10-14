@@ -7,6 +7,7 @@ spec:
   statusInformers:
   - deployment/replicated
   - deployment/alpine-sleeper
+  - deployment/alpine-postgres
   releaseNotes: 'Disaster recovery via native Velero backups and S3-compatible storage
     (EC PR #577).
 
@@ -14,11 +15,11 @@ spec:
 
     Preserves configurable Alpine output, SDK 1.19.11, and worker-node support.
 
-    Adds a 1 GiB Alpine PVC with a timestamp file overwritten every configured interval.
+    Writes one timestamp row per iteration to PostgreSQL, with 128 MiB database storage and a 16 MiB logical backup volume.
 
-    Adds EC v3 air gap image rewriting for Alpine, SDK, Velero, and the AWS plugin.
+    Adds EC v3 air gap image rewriting for the PostgreSQL Alpine writer, database, SDK, Velero, and the AWS plugin.
 
-    Exercises PR #591 vendor Backup/Restore policies, backup filtering, and a restore resource modifier.
+    Exercises PR #591 vendor Backup/Restore policies, backup filtering, and restore resource modifiers, including a PostgreSQL marker recorded in restore_events.
 
     Requires an EC build containing PR #591. Prototype DR backups are not compatible.
 

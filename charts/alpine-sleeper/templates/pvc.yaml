@@ -1,13 +1,16 @@
+{{- range $name, $size := dict "data" .Values.postgres.storage "backup" .Values.postgres.backupStorage }}
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: alpine-sleeper-data
+  name: alpine-postgres-{{ $name }}
   labels:
-    app.kubernetes.io/name: alpine-sleeper
+    app.kubernetes.io/name: alpine-postgres
     app.kubernetes.io/instance: alpine-sleeper
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 1Gi
+      storage: {{ $size | quote }}
+{{- end }}

@@ -15,22 +15,23 @@ spec:
         create: true
         name: velero
     extraVolumes:
-      - name: web-identity
-        projected:
-          sources:
-            - serviceAccountToken:
-                expirationSeconds: 3600
-                path: token
+    - name: web-identity
+      projected:
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3600
+            path: token
     extraVolumeMounts:
-      - name: web-identity
-        mountPath: /var/run/secrets/aws
-        readOnly: true
+    - name: web-identity
+      mountPath: /var/run/secrets/aws
+      readOnly: true
     image:
       repository: '{{repl ReplicatedImageName "docker.io/velero/velero" true }}'
       tag: v1.18.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: '{{repl ReplicatedImageName "docker.io/velero/velero-plugin-for-aws:v1.14.2" true }}'
+      image: '{{repl ReplicatedImageName "docker.io/velero/velero-plugin-for-aws:v1.14.2"
+        true }}'
       volumeMounts:
       - name: plugins
         mountPath: /target
@@ -43,21 +44,21 @@ spec:
       podVolumePath: /var/lib/ec/kubelet/pods
       pluginVolumePath: /var/lib/ec/kubelet/plugins
       extraVolumes:
-        - name: web-identity
-          projected:
-            sources:
-              - serviceAccountToken:
-                  expirationSeconds: 3600
-                  path: token
+      - name: web-identity
+        projected:
+          sources:
+          - serviceAccountToken:
+              expirationSeconds: 3600
+              path: token
       extraVolumeMounts:
-        - name: web-identity
-          mountPath: /var/run/secrets/aws
-          readOnly: true
+      - name: web-identity
+        mountPath: /var/run/secrets/aws
+        readOnly: true
     configuration:
       defaultVolumesToFsBackup: true
       extraEnvVars:
-        - name: AWS_EC2_METADATA_DISABLED
-          value: "true"
+      - name: AWS_EC2_METADATA_DISABLED
+        value: 'true'
     metrics:
       serviceMonitor:
         enabled: false
@@ -65,11 +66,29 @@ spec:
     configMaps:
       pr591-modifiers:
         data:
-          resource-modifiers.yaml: "version: v1\nresourceModifierRules:\n  - conditions:\n\
-            \      groupResource: configmaps\n      resourceNameRegex: \"^alpine-dr-restore-test$\"\
-            \n      labelSelector:\n        matchLabels:\n          dr-test: restore\n\
-            \    patches:\n      - operation: replace\n        path: /data/state\n   \
-            \     value: restored-by-pr591\n"
+          resource-modifiers.yaml: |
+            version: v1
+            resourceModifierRules:
+            - conditions:
+                groupResource: configmaps
+                resourceNameRegex: ^alpine-dr-restore-test$
+                labelSelector:
+                  matchLabels:
+                    dr-test: restore
+              patches:
+              - operation: replace
+                path: /data/state
+                value: restored-by-pr591
+            - conditions:
+                groupResource: configmaps
+                resourceNameRegex: ^alpine-postgres-config$
+                labelSelector:
+                  matchLabels:
+                    dr-test: postgres
+              patches:
+              - operation: replace
+                path: /data/restore-marker
+                value: restored-by-pr591
   builder:
     backupsEnabled: false
     configuration:
@@ -97,8 +116,26 @@ spec:
     configMaps:
       pr591-modifiers:
         data:
-          resource-modifiers.yaml: "version: v1\nresourceModifierRules:\n  - conditions:\n\
-            \      groupResource: configmaps\n      resourceNameRegex: \"^alpine-dr-restore-test$\"\
-            \n      labelSelector:\n        matchLabels:\n          dr-test: restore\n\
-            \    patches:\n      - operation: replace\n        path: /data/state\n   \
-            \     value: restored-by-pr591\n"
+          resource-modifiers.yaml: |
+            version: v1
+            resourceModifierRules:
+            - conditions:
+                groupResource: configmaps
+                resourceNameRegex: ^alpine-dr-restore-test$
+                labelSelector:
+                  matchLabels:
+                    dr-test: restore
+              patches:
+              - operation: replace
+                path: /data/state
+                value: restored-by-pr591
+            - conditions:
+                groupResource: configmaps
+                resourceNameRegex: ^alpine-postgres-config$
+                labelSelector:
+                  matchLabels:
+                    dr-test: postgres
+              patches:
+              - operation: replace
+                path: /data/restore-marker
+                value: restored-by-pr591

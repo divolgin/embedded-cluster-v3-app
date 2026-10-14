@@ -127,3 +127,14 @@ spec:
           type: text
           readonly: true
           value: '{{repl ConfigOption "environment" }}'
+    - name: database
+      title: PostgreSQL
+      description: Credentials for the timestamp database and its Alpine writer.
+      items:
+        - name: database_password
+          title: Database password
+          type: password
+          default: '{{repl RandomString 32 }}'
+          required: true
+          readonly: true
+          help_text: Generated once and retained through redeploys and disaster recovery.
