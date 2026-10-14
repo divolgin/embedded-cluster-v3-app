@@ -1,0 +1,28 @@
+charts/alpine-sleeper/values.yaml
+  s_1f6bf00e0314e1::t_528a393f37658b 4-12,17-28
+  s_1f6bf00e0314e1::t_c1ba47b63d91c6 13-16
+charts/alpine-sleeper/templates/config-test.yaml
+  s_1f6bf00e0314e1::t_f0b7a157b8ec3b 1-23
+charts/alpine-sleeper/Chart.yaml
+  s_1f6bf00e0314e1::t_ff1972eb28265b 5
+specs/alpine-sleeper.yaml
+  s_1f6bf00e0314e1::t_c7e252f2bb66f2 8,17-36
+specs/config.yaml
+  s_1f6bf00e0314e1::t_d7cfa4db3f470e 24-129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "0cc5d0e4265cdfce179678b9e8de16eb8f7341cb",
+  "prompts": {},
+  "sessions": {
+    "s_1f6bf00e0314e1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13b64-4bf2-79a0-bd59-8cc732a85fbb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": null
+    }
+  }
+}
