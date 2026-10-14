@@ -1,0 +1,23 @@
+apiVersion: troubleshoot.sh/v1beta3
+kind: Preflight
+metadata:
+  name: alpine-sleeper-preflight
+spec:
+  collectors:
+    - data:
+        docString: Static success data for the always-passing smoke test.
+        name: preflight/smoke-test.txt
+        data: pass
+  analyzers:
+    - docString: |
+        Title: Preflight smoke test
+        This check always passes using static data, so manual testing is never
+        blocked by application preflight requirements.
+      textAnalyze:
+        checkName: Preflight smoke test
+        fileName: preflight/smoke-test.txt
+        regex: '^pass$'
+        outcomes:
+          - pass:
+              when: "true"
+              message: Application preflight checks passed.
