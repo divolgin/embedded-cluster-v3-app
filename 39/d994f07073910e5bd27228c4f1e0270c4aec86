@@ -1,0 +1,37 @@
+specs/alpine-sleeper.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 8,13,17-19,41-43
+charts/alpine-sleeper/templates/deployment.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 29-32,35-38,46-58
+charts/alpine-sleeper/templates/postgres.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 1-156
+charts/alpine-sleeper/Chart.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 3,5
+specs/kots-app.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 10,18,20,22
+specs/config.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 130-140
+specs/backup.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 18-39
+charts/alpine-sleeper/templates/pvc.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 1-2,6,8,15-16
+specs/velero.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 18-23,25-27,33-34,47-52,54-56,60-61,69-91,119-141
+charts/alpine-sleeper/values.yaml
+  s_1f6bf00e0314e1::t_fe3b4964c72925 3,29-36
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "39d994f07073910e5bd27228c4f1e0270c4aec86",
+  "prompts": {},
+  "sessions": {
+    "s_1f6bf00e0314e1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13b64-4bf2-79a0-bd59-8cc732a85fbb",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
