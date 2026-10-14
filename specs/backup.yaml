@@ -15,3 +15,25 @@ spec:
         embeddedcluster.replicated.com/recovery: "true"
   defaultVolumesToFsBackup: true
   snapshotVolumes: false
+  # pg_dump completes before Velero copies the dump volume. Failure aborts backup.
+  hooks:
+    resources:
+      - name: postgres-dump
+        includedResources:
+          - pods
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: alpine-postgres
+        pre:
+          - exec:
+              container: postgres
+              command:
+                - /bin/sh
+                - -ec
+                - >-
+                  pg_dump --host=127.0.0.1 --username="$POSTGRES_USER"
+                  --dbname="$POSTGRES_DB" --format=custom --no-owner --no-privileges
+                  --file=/backups/database.dump.tmp &&
+                  mv /backups/database.dump.tmp /backups/database.dump
+              onError: Fail
+              timeout: 2m

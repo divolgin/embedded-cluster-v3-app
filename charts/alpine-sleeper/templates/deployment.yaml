@@ -26,9 +26,16 @@ spec:
           command: ["/bin/sh", "-ec"]
           args:
             - |
+              until psql -X --set=ON_ERROR_STOP=1 -c 'SELECT 1 FROM timestamps LIMIT 0;'; do
+                echo 'Waiting for PostgreSQL and the timestamps table...'
+                sleep 2
+              done
               while true; do
                 printf '%s\n' "$MESSAGE"
-                date -u '+%Y-%m-%dT%H:%M:%SZ' > /data/timestamp.txt
+                if ! psql -X --set=ON_ERROR_STOP=1 \
+                  -c 'INSERT INTO timestamps DEFAULT VALUES RETURNING id, recorded_at;'; then
+                  echo 'Timestamp insert failed; retrying next iteration.' >&2
+                fi
                 sleep "$INTERVAL_SECONDS"
               done
           env:
@@ -36,9 +43,19 @@ spec:
               value: {{ .Values.message | toString | quote }}
             - name: INTERVAL_SECONDS
               value: {{ .Values.intervalSeconds | toString | quote }}
-          volumeMounts:
-            - name: data
-              mountPath: /data
+            - name: PGHOST
+              value: alpine-postgres
+            - name: PGDATABASE
+              value: alpine
+            - name: PGUSER
+              value: alpine
+            - name: PGCONNECT_TIMEOUT
+              value: "5"
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: alpine-postgres
+                  key: password
           resources:
             requests:
               cpu: 1m
@@ -46,7 +63,3 @@ spec:
             limits:
               cpu: 100m
               memory: 32Mi
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: alpine-sleeper-data

@@ -5,15 +5,18 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.11.0
+    chartVersion: 0.13.0
   releaseName: alpine-sleeper
   values:
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
-    image: '{{repl ReplicatedImageName "docker.io/library/alpine:3.23.5" true }}'
+    image: '{{repl ReplicatedImageName "docker.io/library/postgres:17.11-alpine3.23" true }}'
     replicated:
       image:
         registry: '{{repl ReplicatedImageRegistry "proxy.replicated.com" }}'
+    postgres:
+      image: '{{repl ReplicatedImageName "docker.io/library/postgres:17.11-alpine3.23" true }}'
+      password: '{{repl ConfigOption "database_password" }}'
     configTest:
       public:
         environment: '{{repl ConfigOption "environment" }}'
@@ -35,7 +38,9 @@ spec:
         certificate: '{{repl ConfigOption "certificate" }}'
         private_key: '{{repl ConfigOption "private_key" }}'
   builder:
-    image: docker.io/library/alpine:3.23.5
+    postgres:
+      image: docker.io/library/postgres:17.11-alpine3.23
+    image: docker.io/library/postgres:17.11-alpine3.23
     replicated:
       image:
         registry: proxy.replicated.com
