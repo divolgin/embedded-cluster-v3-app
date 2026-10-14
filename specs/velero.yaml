@@ -26,12 +26,11 @@ spec:
       mountPath: /var/run/secrets/aws
       readOnly: true
     image:
-      repository: '{{repl ReplicatedImageName "docker.io/velero/velero" true }}'
+      repository: docker.io/velero/velero
       tag: v1.18.2
     initContainers:
     - name: velero-plugin-for-aws
-      image: '{{repl ReplicatedImageName "docker.io/velero/velero-plugin-for-aws:v1.14.2"
-        true }}'
+      image: docker.io/velero/velero-plugin-for-aws:v1.14.2
       volumeMounts:
       - name: plugins
         mountPath: /target

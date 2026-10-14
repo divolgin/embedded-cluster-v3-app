@@ -17,7 +17,7 @@ spec:
 
     Writes one timestamp row per iteration to PostgreSQL, with 128 MiB database storage and a 16 MiB logical backup volume.
 
-    Adds EC v3 air gap image rewriting for the PostgreSQL Alpine writer, database, SDK, Velero, and the AWS plugin.
+    Uses direct image names for the PostgreSQL Alpine writer, database, Velero, and the AWS plugin.
 
     Exercises PR #591 vendor Backup/Restore policies, backup filtering, and restore resource modifiers, including a PostgreSQL marker recorded in restore_events.
 
