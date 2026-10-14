@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-config-test
+data:
+{{- range $name, $value := .Values.configTest.public }}
+  {{ $name }}: {{ $value | toString | quote }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-config-test
+type: Opaque
+data:
+{{- range $name, $value := .Values.configTest.secret }}
+  {{- /* File config values already contain base64-encoded contents. */}}
+  {{- if or (eq $name "certificate") (eq $name "private_key") }}
+  {{ $name }}: {{ $value | toString | quote }}
+  {{- else }}
+  {{ $name }}: {{ $value | toString | b64enc | quote }}
+  {{- end }}
+{{- end }}

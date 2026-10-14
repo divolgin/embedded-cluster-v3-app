@@ -1,3 +1,28 @@
 message: "Hello from Alpine!"
 intervalSeconds: "10"
 image: docker.io/library/alpine:3.23.5
+
+# Manual Config screen fixtures; these are not consumed by the pod.
+configTest:
+  public:
+    environment: development
+    log_level: info
+    enable_notifications: '0'
+    notification_email: ''
+    banner_message: Welcome to the config test app.
+    extra_settings: |-
+      feature_alpha=false
+      feature_beta=true
+      region=us-west-2
+    enable_advanced: '0'
+    username: test-user
+    certificate_filename: ''
+    private_key_filename: ''
+    endpoint: https://example.com/api
+    advanced_notes: ''
+    readonly_summary: ''
+  secret:
+    password: ''
+    api_token: ''
+    certificate: ''
+    private_key: ''
