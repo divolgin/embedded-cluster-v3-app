@@ -2,7 +2,7 @@ apiVersion: v2
 name: alpine-sleeper
 description: An Alpine writer with PostgreSQL timestamps and logical database backups.
 type: application
-version: 0.13.0
+version: 0.14.0
 appVersion: "3.23.5"
 dependencies:
   - name: replicated
