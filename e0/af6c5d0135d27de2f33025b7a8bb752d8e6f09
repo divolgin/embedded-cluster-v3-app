@@ -1,0 +1,19 @@
+specs/velero.yaml
+  s_1ea129d5fb4268::t_09ee9e62b284a8 42-45
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e0af6c5d0135d27de2f33025b7a8bb752d8e6f09",
+  "prompts": {},
+  "sessions": {
+    "s_1ea129d5fb4268": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a15592-d2b3-7b42-b601-d81594c41d0c",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "divolgin <dmitriy@replicated.com>"
+    }
+  }
+}
