@@ -39,3 +39,7 @@ spec:
               - operation: replace
                 path: /data/restore-marker
                 value: restored-by-pr591
+  builder:
+    initContainers:
+    - name: velero-plugin-for-aws
+      image: docker.io/velero/velero-plugin-for-aws:v1.14.2
