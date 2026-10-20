@@ -5,7 +5,7 @@ metadata:
   name: alpine-sleeper
 spec:
   includedNamespaces:
-    - 'repl{{ Namespace }}'
+    - "*"
   orLabelSelectors:
     - matchExpressions:
         - key: dr-test
