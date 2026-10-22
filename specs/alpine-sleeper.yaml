@@ -47,7 +47,8 @@ spec:
         readonly_default: '{{repl ConfigOption "readonly_default" }}'
         readonly_value: '{{repl ConfigOption "readonly_value" }}'
         broken_default: '{{repl ConfigOption "broken_default" }}'
-        multiline_default: '{{repl ConfigOption "multiline_default" }}'
+        multiline_default: |-
+          {{repl- ConfigOption "multiline_default" | nindent 10 }}
         editable_to_readonly: '{{repl ConfigOption "editable_to_readonly" }}'
         readonly_to_editable: '{{repl ConfigOption "readonly_to_editable" }}'
         empty_initializer: '{{repl ConfigOption "empty_initializer" }}'
