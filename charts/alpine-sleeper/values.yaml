@@ -37,7 +37,7 @@ postgres:
 
 # Packaged defaults read by the Replicated HelmValue function.
 compatibilityDefaults:
-  marker: packaged-release-a
+  marker: packaged-release-b
 templateFunctions:
   public: {}
   secret: {}

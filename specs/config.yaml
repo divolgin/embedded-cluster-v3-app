@@ -140,49 +140,49 @@ spec:
           help_text: Initialized once and retained through redeploys and disaster recovery.
 
     - name: release_defaults
-      title: PR 619 release A fixtures
+      title: PR 619 release B fixtures
       description: Use dummy values. Compare config-test resources across previews, restarts,
         upgrades and restore.
       items:
       - name: follow_default
         title: Untouched ordinary default
         type: text
-        default: release-a
-        help_text: Leave untouched; release B will change this default.
+        default: release-b
+        help_text: Untouched values now resolve to release-b.
       - name: override_default
         title: Explicit different override
         type: text
-        default: release-a
+        default: release-b
         help_text: Enter customer-choice in release A; it must survive release B.
       - name: equal_default
         title: Explicit override equal to default
         type: text
-        default: release-a
+        default: release-b
         help_text: Type release-a explicitly; it must remain release-a in release B.
       - name: clear_override
         title: Clearable override
         type: text
-        default: release-a
+        default: release-b
         help_text: Enter customer-choice, save, then clear; the release default must return.
       - name: required_default
         title: Required ordinary default
         type: text
-        default: required-a
+        default: required-b
         required: true
       - name: dependency_input
         title: Dependency input
         type: text
-        default: input-a
+        default: input-b
       - name: dependent_default
         title: Dependent ordinary default
         type: text
-        default: '{{repl printf "%s-derived-a" (ConfigOption "dependency_input") }}'
+        default: '{{repl printf "%s-derived-b" (ConfigOption "dependency_input") }}'
         help_text: Change Dependency input and verify this follows it unless explicitly
           overridden.
       - name: zero_override
         title: Explicit zero
         type: text
-        default: '7'
+        default: '9'
         help_text: Enter 0; it must remain an explicit override across upgrades.
       - name: native_true
         title: Native true default
@@ -192,25 +192,25 @@ spec:
       - name: native_false
         title: Native false default
         type: bool
-        default: false
+        default: true
       - name: static_initializer
         title: Static value initializer
         type: text
-        value: initialized-a
-        default: fallback-a
+        value: initialized-b
+        default: fallback-b
         help_text: Must stay initialized-a after upgrade. Clearing uses fallback, never
           reruns value.
       - name: clearable_initializer
         title: Clearable value initializer
         type: text
-        value: '{{repl RandomString 16 }}'
-        default: cleared-a
-        help_text: Dummy value. Clear and save; expect cleared-a, never a newly generated
+        value: '{{repl RandomString 24 }}'
+        default: cleared-b
+        help_text: Dummy value. Clear and save; expect cleared-b, never a newly generated
           initializer.
       - name: random_default
         title: Recomputed random default
         type: text
-        default: '{{repl RandomString 16 }}'
+        default: '{{repl RandomString 24 }}'
         help_text: Dummy value; expected to change between rendering operations, unlike
           value initializers.
       - name: password_copy
@@ -221,22 +221,22 @@ spec:
       - name: hidden_default
         title: Hidden ordinary default
         type: text
-        default: hidden-a
+        default: hidden-b
         hidden: true
       - name: conditional_default
         title: Conditional ordinary default
         type: text
-        default: conditional-a
+        default: conditional-b
         when: '{{repl ConfigOptionEquals "enable_advanced" "1" }}'
       - name: readonly_default
         title: Readonly ordinary default
         type: text
-        default: readonly-a
+        default: readonly-b
         readonly: true
       - name: readonly_value
         title: Readonly value expression
         type: text
-        value: '{{repl printf "%s-readonly-a" (ConfigOption "dependency_input") }}'
+        value: '{{repl printf "%s-readonly-b" (ConfigOption "dependency_input") }}'
         readonly: true
       - name: broken_default
         title: Optional failed default
@@ -248,25 +248,26 @@ spec:
         title: Multiline ordinary default
         type: textarea
         default: |-
-          release=a
-          feature=false
+          release=b
+          feature=true
       - name: editable_to_readonly
         title: Editable to readonly in release B
         type: text
-        default: editable-a
-        help_text: Enter customer-choice; release B will mark this readonly and ignore that override.
+        default: editable-b
+        readonly: true
+        help_text: Now readonly; the release A customer override must be ignored.
       - name: readonly_to_editable
         title: Readonly to editable in release B
         type: text
-        value: readonly-initializer-a
-        readonly: true
+        value: readonly-initializer-b
+        readonly: false
       - name: empty_initializer
         title: Clear initializer without fallback
         type: text
-        value: '{{repl RandomString 16 }}'
+        value: '{{repl RandomString 24 }}'
         help_text: Clear and save; must stay empty across previews and upgrades.
       - name: hidden_initializer
         title: Hidden initializer
         type: text
-        value: '{{repl randAlphaNum 16 }}'
+        value: '{{repl randAlphaNum 24 }}'
         hidden: true

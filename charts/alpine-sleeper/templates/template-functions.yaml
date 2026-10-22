@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: {{ .Release.Name }}-template-functions
 data:
-  fixture_release: "A"
+  fixture_release: "B"
 {{- range $name, $value := .Values.templateFunctions.public }}
   {{ $name }}: {{ $value | toString | quote }}
 {{- end }}

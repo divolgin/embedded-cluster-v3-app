@@ -8,7 +8,7 @@ spec:
   - deployment/replicated
   - deployment/alpine-sleeper
   - deployment/alpine-postgres
-  releaseNotes: 'Release A: PR 619 default-provenance fixtures and PR 618 / KOTS 6082 template-function catalog.
+  releaseNotes: 'Release B: updated configuration defaults, initializer expressions, and readonly transitions.
 
     Requires runtime builds containing the respective PRs; the EC version pin alone does not establish support.
 
