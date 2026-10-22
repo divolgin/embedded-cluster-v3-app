@@ -5,15 +5,12 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.14.0
+    chartVersion: 0.15.0
   releaseName: alpine-sleeper
   values:
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
     image: docker.io/library/postgres:17.11-alpine3.23
-    # replicated:
-    #   image:
-    #     registry: '{ { repl ReplicatedImageRegistry "proxy.replicated.com" } }'
     postgres:
       image: docker.io/library/postgres:17.11-alpine3.23
       password: '{{repl ConfigOption "database_password" }}'
@@ -32,11 +29,74 @@ spec:
         endpoint: '{{repl ConfigOption "endpoint" }}'
         advanced_notes: '{{repl ConfigOption "advanced_notes" }}'
         readonly_summary: '{{repl ConfigOption "readonly_summary" }}'
+        follow_default: '{{repl ConfigOption "follow_default" }}'
+        override_default: '{{repl ConfigOption "override_default" }}'
+        equal_default: '{{repl ConfigOption "equal_default" }}'
+        clear_override: '{{repl ConfigOption "clear_override" }}'
+        required_default: '{{repl ConfigOption "required_default" }}'
+        dependency_input: '{{repl ConfigOption "dependency_input" }}'
+        dependent_default: '{{repl ConfigOption "dependent_default" }}'
+        zero_override: '{{repl ConfigOption "zero_override" }}'
+        native_true: '{{repl ConfigOption "native_true" }}'
+        native_false: '{{repl ConfigOption "native_false" }}'
+        static_initializer: '{{repl ConfigOption "static_initializer" }}'
+        clearable_initializer: '{{repl ConfigOption "clearable_initializer" }}'
+        random_default: '{{repl ConfigOption "random_default" }}'
+        hidden_default: '{{repl ConfigOption "hidden_default" }}'
+        conditional_default: '{{repl ConfigOption "conditional_default" }}'
+        readonly_default: '{{repl ConfigOption "readonly_default" }}'
+        readonly_value: '{{repl ConfigOption "readonly_value" }}'
+        broken_default: '{{repl ConfigOption "broken_default" }}'
+        multiline_default: '{{repl ConfigOption "multiline_default" }}'
+        editable_to_readonly: '{{repl ConfigOption "editable_to_readonly" }}'
+        readonly_to_editable: '{{repl ConfigOption "readonly_to_editable" }}'
+        empty_initializer: '{{repl ConfigOption "empty_initializer" }}'
+        hidden_initializer: '{{repl ConfigOption "hidden_initializer" }}'
       secret:
         password: '{{repl ConfigOption "password" }}'
+        password_copy: '{{repl ConfigOption "password_copy" }}'
         api_token: '{{repl ConfigOption "api_token" }}'
         certificate: '{{repl ConfigOption "certificate" }}'
         private_key: '{{repl ConfigOption "private_key" }}'
+    templateFunctions:
+      public:
+        HasLocalRegistry: '{{repl HasLocalRegistry | toString }}'
+        LocalImageName: '{{repl LocalImageName "docker.io/library/postgres:17.11-alpine3.23" }}'
+        LocalRegistryAddress: '{{repl LocalRegistryAddress }}'
+        LocalRegistryHost: '{{repl LocalRegistryHost }}'
+        LocalRegistryNamespace: '{{repl LocalRegistryNamespace }}'
+        IdentityServiceEnabled: '{{repl IdentityServiceEnabled | toString }}'
+        IdentityServiceClientID: '{{repl IdentityServiceClientID }}'
+        IdentityServiceName: '{{repl IdentityServiceName }}'
+        IdentityServicePort: '{{repl IdentityServicePort }}'
+        IdentityServiceRoles: '{{repl IdentityServiceRoles | toJson }}'
+        KotsVersion: '{{repl KotsVersion }}'
+        KurlAll: '{{repl KurlAll }}'
+        KurlString: '{{repl KurlString "spec.kubernetes.version" }}'
+        KurlOption: '{{repl KurlOption "spec.kubernetes.version" }}'
+        KurlBool: '{{repl KurlBool "spec.containerd.enabled" | toString }}'
+        KurlInt: '{{repl KurlInt "spec.kubernetes.serviceNodePortRange" | toString }}'
+        NodeCount: '{{repl NodeCount | toString }}'
+        HelmValue: '{{repl HelmValue "compatibilityDefaults.marker" }}'
+        HelmValue_dependency: '{{repl HelmValue "replicated.image.tag" }}'
+        HelmValue_missing: '{{repl HelmValue "compatibilityDefaults.missing" }}'
+        ReplicatedImageName: '{{repl ReplicatedImageName "docker.io/library/postgres:17.11-alpine3.23" }}'
+        ReplicatedImageName_noProxy: '{{repl ReplicatedImageName "docker.io/library/postgres:17.11-alpine3.23" true }}'
+        ReplicatedImageRegistry: '{{repl ReplicatedImageRegistry "docker.io" }}'
+        ReplicatedImageRegistry_noProxy: '{{repl ReplicatedImageRegistry "docker.io" true }}'
+        IsRequired: '{{repl IsRequired | toString }}'
+        ReleaseNotes: '{{repl ReleaseNotes }}'
+        ChannelName: '{{repl ChannelName }}'
+        PrivateCACert: '{{repl PrivateCACert }}'
+        ImagePullSecretName: '{{repl ImagePullSecretName }}'
+        KubernetesVersion: '{{repl KubernetesVersion }}'
+        Add: '{{repl Add 2 3 | toString }}'
+        Sub: '{{repl Sub 5 2 | toString }}'
+        Mult: '{{repl Mult 2 3 | toString }}'
+        Div: '{{repl Div 6 2 | toString }}'
+      secret:
+        LocalRegistryImagePullSecret: '{{repl LocalRegistryImagePullSecret }}'
+        IdentityServiceClientSecret: '{{repl IdentityServiceClientSecret }}'
   builder:
     postgres:
       image: docker.io/library/postgres:17.11-alpine3.23

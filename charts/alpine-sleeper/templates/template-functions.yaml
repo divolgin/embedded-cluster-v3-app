@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-template-functions
+data:
+  fixture_release: "A"
+{{- range $name, $value := .Values.templateFunctions.public }}
+  {{ $name }}: {{ $value | toString | quote }}
+{{- end }}
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ .Release.Name }}-template-functions
+type: Opaque
+stringData:
+{{- if not .Values.templateFunctions.secret }}
+  fixture: "standalone-helm"
+{{- end }}
+{{- range $name, $value := .Values.templateFunctions.secret }}
+  {{ $name }}: {{ $value | toString | quote }}
+{{- end }}

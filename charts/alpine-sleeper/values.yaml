@@ -34,3 +34,10 @@ postgres:
   # PostgreSQL needs space for its system catalogs and WAL, even with a tiny table.
   storage: 128Mi
   backupStorage: 16Mi
+
+# Packaged defaults read by the Replicated HelmValue function.
+compatibilityDefaults:
+  marker: packaged-release-a
+templateFunctions:
+  public: {}
+  secret: {}

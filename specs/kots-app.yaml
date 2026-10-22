@@ -8,7 +8,11 @@ spec:
   - deployment/replicated
   - deployment/alpine-sleeper
   - deployment/alpine-postgres
-  releaseNotes: 'Disaster recovery via native Velero backups and S3-compatible storage
+  releaseNotes: 'Release A: PR 619 default-provenance fixtures and PR 618 / KOTS 6082 template-function catalog.
+
+    Requires runtime builds containing the respective PRs; the EC version pin alone does not establish support.
+
+    Disaster recovery via native Velero backups and S3-compatible storage
     (EC PR #577).
 
     Packages Velero 1.18.2 and AWS plugin 1.14.2 using chart 12.1.0.
