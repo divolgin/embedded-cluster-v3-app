@@ -5,7 +5,7 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.16.1
+    chartVersion: 0.16.2
   releaseName: alpine-sleeper
   values:
     message: '{{repl ConfigOption "message" }}'
