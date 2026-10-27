@@ -46,7 +46,6 @@ spec:
         conditional_default: '{{repl ConfigOption "conditional_default" }}'
         readonly_default: '{{repl ConfigOption "readonly_default" }}'
         readonly_value: '{{repl ConfigOption "readonly_value" }}'
-        broken_default: '{{repl ConfigOption "broken_default" }}'
         multiline_default: |-
           {{repl- ConfigOption "multiline_default" | nindent 10 }}
         editable_to_readonly: '{{repl ConfigOption "editable_to_readonly" }}'
