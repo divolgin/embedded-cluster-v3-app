@@ -238,12 +238,6 @@ spec:
         type: text
         value: '{{repl printf "%s-readonly-b" (ConfigOption "dependency_input") }}'
         readonly: true
-      - name: broken_default
-        title: Optional failed default
-        type: text
-        default: '{{repl MissingDefaultFunction }}'
-        help_text: Intentionally logs a default-template error; resolves empty. Enter
-          an override to verify it remains usable.
       - name: multiline_default
         title: Multiline ordinary default
         type: textarea
