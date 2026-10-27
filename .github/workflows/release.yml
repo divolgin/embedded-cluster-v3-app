@@ -3,7 +3,7 @@ name: Validate and publish application
 on:
   pull_request:
   push:
-    branches: [main]
+    branches: [ecv2-kots]
 
 permissions:
   contents: read
@@ -34,8 +34,8 @@ jobs:
       - name: Generate and lint
         run: make lint
       - name: Create Replicated release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/ecv2-kots'
         env:
           REPLICATED_API_TOKEN: ${{ secrets.REPLICATED_API_TOKEN }}
           REPLICATED_APP: ${{ secrets.REPLICATED_APP }}
-        run: replicated release create --yaml-dir manifests
+        run: replicated release create --yaml-dir manifests --promote ecv2-kots
