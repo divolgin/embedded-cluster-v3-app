@@ -3,6 +3,7 @@ kind: HelmChart
 metadata:
   name: velero
 spec:
+  exclude: '{{repl ne KotsVersion "" }}'
   chart:
     name: velero
     chartVersion: 12.1.0
