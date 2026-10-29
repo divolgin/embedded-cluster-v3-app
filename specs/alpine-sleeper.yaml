@@ -5,7 +5,7 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.16.4
+    chartVersion: 0.16.5
     releaseName: alpine-sleeper
   helmVersion: v3
   useHelmInstall: false

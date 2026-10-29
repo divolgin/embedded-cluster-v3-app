@@ -1,6 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: alpine-sleeper
   labels:
     app.kubernetes.io/name: alpine-sleeper

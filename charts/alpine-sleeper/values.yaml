@@ -41,3 +41,8 @@ compatibilityDefaults:
 templateFunctions:
   public: {}
   secret: {}
+
+# Preserve SDK resources during the subsequent migration to HelmChart v1beta2.
+replicated:
+  commonAnnotations:
+    kots.io/keep: "true"

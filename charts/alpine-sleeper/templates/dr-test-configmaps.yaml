@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: alpine-dr-restore-test
   labels:
     dr-test: restore
@@ -11,6 +13,8 @@ data:
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: alpine-dr-excluded
   labels:
     dr-test: exclude

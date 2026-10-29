@@ -3,6 +3,8 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: alpine-postgres-{{ $name }}
   labels:
     app.kubernetes.io/name: alpine-postgres

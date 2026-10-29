@@ -1,6 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: {{ .Release.Name }}-config-test
 data:
 {{- range $name, $value := .Values.configTest.public }}
@@ -10,6 +12,8 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
+  annotations:
+    kots.io/keep: "true"
   name: {{ .Release.Name }}-config-test
 type: Opaque
 data:
