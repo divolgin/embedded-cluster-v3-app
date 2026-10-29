@@ -22,7 +22,7 @@ function run(env = process.env, execute = execFileSync, append = appendFileSync)
   }
   const result = execute('replicated', [
     'channel', 'releases', channel, '--app', app,
-    '--page', '1', '--page-size', '1', '-o', 'json',
+    '--page', '0', '--page-size', '1', '-o', 'json',
   ], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
   const version = nextVersion(JSON.parse(result));
   append(env.GITHUB_OUTPUT, `version=${version}\n`);
