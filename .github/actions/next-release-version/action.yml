@@ -1,0 +1,15 @@
+name: Next channel release version
+description: Read the latest Replicated channel release and increment its patch version
+inputs:
+  channel:
+    description: Replicated channel name (case sensitive)
+    required: true
+  app:
+    description: Replicated application slug or ID
+    required: true
+outputs:
+  version:
+    description: Next release version
+runs:
+  using: node24
+  main: index.js
