@@ -1,14 +1,14 @@
-apiVersion: kots.io/v1beta1
+apiVersion: kots.io/v1beta2
 kind: HelmChart
 metadata:
   name: alpine-sleeper
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.16.5
-    releaseName: alpine-sleeper
-  helmVersion: v3
-  useHelmInstall: false
+    chartVersion: 0.16.6
+  releaseName: alpine-sleeper
+  helmUpgradeFlags:
+    - --take-ownership
   values:
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
