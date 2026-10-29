@@ -1,6 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
+{{- with $.Values.commonLabels }}
+  labels:
+{{ toYaml . | indent 4 }}
+{{- end }}
   annotations:
     kots.io/keep: "true"
   name: {{ .Release.Name }}-template-functions
@@ -13,6 +17,10 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
+{{- with $.Values.commonLabels }}
+  labels:
+{{ toYaml . | indent 4 }}
+{{- end }}
   annotations:
     kots.io/keep: "true"
   name: {{ .Release.Name }}-template-functions

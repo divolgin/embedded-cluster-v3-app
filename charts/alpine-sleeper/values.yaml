@@ -46,3 +46,8 @@ templateFunctions:
 replicated:
   commonAnnotations:
     kots.io/keep: "true"
+
+# Supplied by the HelmChart spec for KOTS-managed backups and registry access.
+commonLabels: {}
+global:
+  imagePullSecrets: []

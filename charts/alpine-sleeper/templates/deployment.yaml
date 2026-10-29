@@ -5,6 +5,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-sleeper
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     app.kubernetes.io/name: alpine-sleeper
     app.kubernetes.io/instance: alpine-sleeper
 spec:
@@ -18,9 +21,16 @@ spec:
   template:
     metadata:
       labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 8 }}
+{{- end }}
         app.kubernetes.io/name: alpine-sleeper
         app.kubernetes.io/instance: alpine-sleeper
     spec:
+{{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+{{- end }}
       containers:
         - name: alpine
           image: {{ .Values.image | quote }}

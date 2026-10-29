@@ -5,6 +5,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-dr-restore-test
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     dr-test: restore
 data:
   state: before-restore
@@ -17,6 +20,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-dr-excluded
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     dr-test: exclude
 data:
   state: should-not-be-backed-up

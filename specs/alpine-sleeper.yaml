@@ -5,11 +5,24 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.16.6
+    chartVersion: 0.16.7
   releaseName: alpine-sleeper
   helmUpgradeFlags:
     - --take-ownership
   values:
+    commonLabels:
+      kots.io/backup: velero
+      kots.io/app-slug: '{{repl LicenseFieldValue "appSlug" }}'
+    global:
+      imagePullSecrets:
+        - name: '{{repl ImagePullSecretName }}'
+    replicated:
+      commonLabels:
+        kots.io/backup: velero
+        kots.io/app-slug: '{{repl LicenseFieldValue "appSlug" }}'
+      podLabels:
+        kots.io/backup: velero
+        kots.io/app-slug: '{{repl LicenseFieldValue "appSlug" }}'
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
     image: docker.io/library/postgres:17.11-alpine3.23

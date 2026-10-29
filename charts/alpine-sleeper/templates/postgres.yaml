@@ -1,6 +1,10 @@
 apiVersion: v1
 kind: Secret
 metadata:
+{{- with $.Values.commonLabels }}
+  labels:
+{{ toYaml . | indent 4 }}
+{{- end }}
   annotations:
     kots.io/keep: "true"
   name: alpine-postgres
@@ -15,6 +19,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-postgres-config
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     dr-test: postgres
 data:
   restore-marker: before-restore
@@ -45,6 +52,10 @@ data:
 apiVersion: v1
 kind: Service
 metadata:
+{{- with $.Values.commonLabels }}
+  labels:
+{{ toYaml . | indent 4 }}
+{{- end }}
   annotations:
     kots.io/keep: "true"
   name: alpine-postgres
@@ -64,6 +75,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-postgres
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     app.kubernetes.io/name: alpine-postgres
     app.kubernetes.io/instance: alpine-sleeper
 spec:
@@ -77,12 +91,19 @@ spec:
   template:
     metadata:
       labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 8 }}
+{{- end }}
         app.kubernetes.io/name: alpine-postgres
         app.kubernetes.io/instance: alpine-sleeper
       annotations:
         # Back up the consistent logical dump, never a live PGDATA directory.
         backup.velero.io/backup-volumes-excludes: pgdata
     spec:
+{{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml . | indent 8 }}
+{{- end }}
       securityContext:
         fsGroup: 70
       containers:

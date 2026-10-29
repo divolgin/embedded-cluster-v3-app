@@ -7,6 +7,9 @@ metadata:
     kots.io/keep: "true"
   name: alpine-postgres-{{ $name }}
   labels:
+{{- with $.Values.commonLabels }}
+{{ toYaml . | indent 4 }}
+{{- end }}
     app.kubernetes.io/name: alpine-postgres
     app.kubernetes.io/instance: alpine-sleeper
 spec:
