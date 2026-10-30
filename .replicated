@@ -1,6 +1,7 @@
 # Packaged charts are also linted/rendered with builder values by make lint.
 charts:
   - path: ./charts/alpine-sleeper
+  - path: ./charts/redis
   - path: ./.build/velero
 manifests:
   - ./manifests/*.yaml

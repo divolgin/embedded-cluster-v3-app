@@ -4,6 +4,14 @@ metadata:
   name: alpine-config
 spec:
   groups:
+    - name: redis
+      title: Redis
+      items:
+        - name: enable_redis
+          title: Enable Redis
+          type: bool
+          default: "1"
+          help_text: Deploy standalone Redis with persistent storage. The data volume is retained when Redis is disabled.
     - name: output
       title: Pod output
       items:

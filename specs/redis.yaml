@@ -1,0 +1,18 @@
+apiVersion: kots.io/v1beta1
+kind: HelmChart
+metadata:
+  name: redis
+spec:
+  chart:
+    name: redis
+    chartVersion: 0.1.1
+    releaseName: redis
+  helmVersion: v3
+  useHelmInstall: true
+  exclude: '{{repl ConfigOptionEquals "enable_redis" "0" }}'
+  values:
+    image: docker.io/library/redis:7.4.8-alpine
+    imagePullSecrets:
+      - name: '{{repl ImagePullSecretName }}'
+  builder:
+    image: docker.io/library/redis:7.4.8-alpine
