@@ -5,7 +5,7 @@ metadata:
 spec:
   chart:
     name: redis
-    chartVersion: 0.1.0
+    chartVersion: 0.1.1
   releaseName: redis
   exclude: '{{repl ConfigOptionEquals "enable_redis" "0" }}'
   values:

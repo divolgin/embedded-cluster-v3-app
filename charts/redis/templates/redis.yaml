@@ -17,6 +17,8 @@ metadata:
   name: {{ .Release.Name }}
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app.kubernetes.io/name: redis
@@ -35,7 +37,10 @@ spec:
         - name: redis
           image: {{ .Values.image | quote }}
           imagePullPolicy: IfNotPresent
-          args: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+          args: ["redis-server", "--dir", "/data", "--save", "", "--appendonly", "yes", "--appendfsync", "everysec", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru"]
+          volumeMounts:
+            - name: data
+              mountPath: /data
           ports:
             - name: redis
               containerPort: 6379
@@ -50,3 +55,7 @@ spec:
             periodSeconds: 10
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-data

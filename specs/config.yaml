@@ -11,7 +11,7 @@ spec:
           title: Enable Redis
           type: bool
           default: "1"
-          help_text: Deploy an optional standalone Redis cache. Data is not persisted.
+          help_text: Deploy standalone Redis with persistent storage. The data volume is retained when Redis is disabled.
     - name: output
       title: Pod output
       items:

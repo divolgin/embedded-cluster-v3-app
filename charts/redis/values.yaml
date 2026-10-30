@@ -1,5 +1,8 @@
 image: docker.io/library/redis:7.4.8-alpine
 imagePullSecrets: []
+persistence:
+  size: 1Gi
+  storageClassName: ""
 resources:
   requests:
     cpu: 10m
