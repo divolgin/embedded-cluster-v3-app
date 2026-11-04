@@ -1,3 +1,4 @@
+{{- $gpuEnabled := eq (toString .Values.gpu.enabled) "true" }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,13 +20,21 @@ spec:
         app.kubernetes.io/name: alpine-sleeper
         app.kubernetes.io/instance: alpine-sleeper
     spec:
+      {{- if and $gpuEnabled .Values.gpu.runtimeClassName }}
+      runtimeClassName: {{ .Values.gpu.runtimeClassName | quote }}
+      {{- end }}
       containers:
         - name: alpine
-          image: {{ .Values.image | quote }}
+          image: {{ ternary .Values.gpu.image .Values.image $gpuEnabled | quote }}
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh", "-ec"]
           args:
             - |
+              {{- if $gpuEnabled }}
+              nvidia-smi -L
+              nvidia-smi
+              echo 'GPU_SMOKE_TEST_PASSED'
+              {{- end }}
               until psql -X --set=ON_ERROR_STOP=1 -c 'SELECT 1 FROM timestamps LIMIT 0;'; do
                 echo 'Waiting for PostgreSQL and the timestamps table...'
                 sleep 2
@@ -39,6 +48,10 @@ spec:
                 sleep "$INTERVAL_SECONDS"
               done
           env:
+            {{- if $gpuEnabled }}
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility
+            {{- end }}
             - name: MESSAGE
               value: {{ .Values.message | toString | quote }}
             - name: INTERVAL_SECONDS
@@ -56,10 +69,23 @@ spec:
                 secretKeyRef:
                   name: alpine-postgres
                   key: password
+          {{- if $gpuEnabled }}
+          readinessProbe:
+            exec:
+              command: ["nvidia-smi", "-L"]
+            timeoutSeconds: 10
+            periodSeconds: 30
+          {{- end }}
           resources:
             requests:
               cpu: 1m
               memory: 8Mi
+              {{- if $gpuEnabled }}
+              nvidia.com/gpu: 1
+              {{- end }}
             limits:
               cpu: 100m
-              memory: 32Mi
+              memory: {{ ternary "128Mi" "32Mi" $gpuEnabled }}
+              {{- if $gpuEnabled }}
+              nvidia.com/gpu: 1
+              {{- end }}

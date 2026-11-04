@@ -4,6 +4,19 @@ metadata:
   name: alpine-config
 spec:
   groups:
+    - name: gpu
+      title: GPU smoke test
+      items:
+        - name: enable_gpu
+          title: Enable GPU test on sleeper
+          type: bool
+          default: "0"
+          help_text: Requires NVIDIA drivers, container runtime support, and a device plugin advertising nvidia.com/gpu. Reserves one GPU and runs nvidia-smi without computation.
+        - name: gpu_runtime_class
+          title: GPU runtime class
+          type: text
+          when: '{{repl ConfigOptionEquals "enable_gpu" "1" }}'
+          help_text: Leave empty for the default runtime or CDI. Enter nvidia if your cluster requires that RuntimeClass.
     - name: redis
       title: Redis
       items:
