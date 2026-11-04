@@ -59,11 +59,16 @@ def generate():
             shutil.rmtree(destination)
         shutil.copytree(output, destination)
     # Local Replicated lint discovers unpacked charts, rather than .tgz files.
-    unpacked = ROOT / ".build" / "velero"
-    if unpacked.exists():
-        shutil.rmtree(unpacked)
-    with tarfile.open(ROOT / "vendor" / "velero-12.1.0.tgz") as archive:
-        archive.extractall(ROOT / ".build", filter="data")
+    for spec in chart_specs():
+        name = spec["chart"]["name"]
+        if (ROOT / "charts" / name).is_dir():
+            continue
+        version = str(spec["chart"]["chartVersion"])
+        unpacked = ROOT / ".build" / name
+        if unpacked.exists():
+            shutil.rmtree(unpacked)
+        with tarfile.open(ROOT / "vendor" / f"{name}-{version}.tgz") as archive:
+            archive.extractall(ROOT / ".build", filter="data")
     print("Generated manifests/", flush=True)
 
 
