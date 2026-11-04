@@ -18,13 +18,6 @@ spec:
           default: "1"
           when: '{{repl ConfigOptionEquals "enable_gpu" "1" }}'
           help_text: Let the operator install the driver on Ubuntu GPU nodes. Disable if a compatible NVIDIA driver is already installed on the host.
-        - name: gpu_kubelet_root
-          title: GPU kubelet root directory
-          type: text
-          default: /var/lib/ec/kubelet
-          required: true
-          when: '{{repl ConfigOptionEquals "enable_gpu" "1" }}'
-          help_text: Default for fresh EC v3 nodes. For migrated nodes or custom data directories, use the actual kubelet root directory.
         - name: gpu_runtime_class
           title: GPU runtime class
           type: text

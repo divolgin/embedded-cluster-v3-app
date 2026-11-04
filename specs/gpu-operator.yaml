@@ -18,7 +18,7 @@ spec:
     driver:
       enabled: '{{repl ConfigOptionEquals "gpu_install_driver" "1" }}'
     hostPaths:
-      kubeletRootDir: '{{repl ConfigOption "gpu_kubelet_root" }}'
+      kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
     toolkit:
       env:
         - name: CONTAINERD_CONFIG
@@ -36,6 +36,6 @@ spec:
     driver:
       enabled: true
     hostPaths:
-      kubeletRootDir: /var/lib/ec/kubelet
+      kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
     operator:
       upgradeCRD: false
