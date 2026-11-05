@@ -18,7 +18,7 @@ spec:
     driver:
       enabled: '{{repl ConfigOptionEquals "gpu_install_driver" "1" }}'
     hostPaths:
-      kubeletRootDir: '{{repl ConfigOption "gpu_kubelet_root" }}'
+      kubeletRootDir: /var/lib/ec/kubelet
     toolkit:
       env:
         - name: CONTAINERD_CONFIG
@@ -32,13 +32,6 @@ spec:
     # EC installs the packaged CRDs; avoid the chart's separate CRD upgrade hook.
     operator:
       upgradeCRD: false
-    extraObjects:
-      - apiVersion: v1
-        kind: Namespace
-        metadata:
-          name: gpu-operator
-          labels:
-            pod-security.kubernetes.io/enforce: privileged
   builder:
     driver:
       enabled: true
