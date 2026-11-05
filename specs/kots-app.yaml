@@ -3,8 +3,6 @@ kind: Application
 metadata:
   name: alpine-ec-v3
 spec:
-  additionalNamespaces:
-    - gpu-operator
   title: Alpine Embedded Cluster v3
   statusInformers:
   - deployment/replicated
