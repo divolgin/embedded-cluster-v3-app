@@ -2,7 +2,7 @@
 /charts/*/charts/
 *.tgz
 !/vendor/velero-12.1.0.tgz
-!/vendor/gpu-operator-v26.7.2.tgz
+!/vendor/gpu-operator-v26.3.3.tgz
 /.venv/
 __pycache__/
 .DS_Store

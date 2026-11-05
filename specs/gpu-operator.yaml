@@ -5,7 +5,7 @@ metadata:
 spec:
   chart:
     name: gpu-operator
-    chartVersion: v26.7.2
+    chartVersion: v26.3.3
   releaseName: gpu-operator
   namespace: gpu-operator
   weight: -50
@@ -17,8 +17,9 @@ spec:
   values:
     driver:
       enabled: '{{repl ConfigOptionEquals "gpu_install_driver" "1" }}'
-    hostPaths:
-      kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
+    # Unsupported by GPU Operator v26.3.3.
+    # hostPaths:
+    #   kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
     toolkit:
       env:
         - name: CONTAINERD_CONFIG
@@ -35,7 +36,8 @@ spec:
   builder:
     driver:
       enabled: true
-    hostPaths:
-      kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
+    # Unsupported by GPU Operator v26.3.3.
+    # hostPaths:
+    #   kubeletRootDir: /var/lib/embedded-cluster/k0s/kubelet
     operator:
       upgradeCRD: false
