@@ -27,6 +27,8 @@ spec:
           value: /run/k0s/containerd.sock
         - name: RUNTIME_CONFIG_SOURCE
           value: command
+        - name: RUNTIME_EXECUTABLE_PATH
+          value: /var/lib/embedded-cluster/k0s/bin/containerd
         - name: CONTAINERD_SET_AS_DEFAULT
           value: "false"
     # EC installs the packaged CRDs; avoid the chart's separate CRD upgrade hook.
