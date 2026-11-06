@@ -3,7 +3,6 @@ charts:
   - path: ./charts/alpine-sleeper
   - path: ./charts/redis
   - path: ./.build/velero
-  - path: ./.build/gpu-operator
 manifests:
   - ./manifests/*.yaml
 repl-lint:
