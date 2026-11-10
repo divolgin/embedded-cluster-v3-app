@@ -8,23 +8,21 @@ spec:
   - deployment/replicated
   - deployment/alpine-sleeper
   - deployment/alpine-postgres
-  releaseNotes: 'Release B: updated configuration defaults, initializer expressions, and readonly transitions.
+  releaseNotes: |
+    ## Release B
 
-    Requires runtime builds containing the respective PRs; the EC version pin alone does not establish support.
+    Updated configuration defaults, initializer expressions, and readonly transitions.
 
-    Disaster recovery via native Velero backups and S3-compatible storage
-    (EC PR #577).
+    ### Features
 
-    Packages Velero 1.18.2 and AWS plugin 1.14.2 using chart 12.1.0.
+    - Disaster recovery via native Velero backups and S3-compatible storage (EC PR #577).
+    - Packages Velero **1.18.2** and AWS plugin **1.14.2** using chart **12.1.0**.
+    - Preserves configurable Alpine output, SDK **1.19.11**, and worker-node support.
+    - Writes one timestamp row per iteration to PostgreSQL, with **128 MiB** database storage and a **16 MiB** logical backup volume.
+    - Uses direct image names for the PostgreSQL Alpine writer, database, Velero, and the AWS plugin.
+    - Exercises PR #591 vendor Backup/Restore policies, backup filtering, and restore resource modifiers, including a PostgreSQL marker recorded in `restore_events`.
 
-    Preserves configurable Alpine output, SDK 1.19.11, and worker-node support.
+    ### Requirements and compatibility
 
-    Writes one timestamp row per iteration to PostgreSQL, with 128 MiB database storage and a 16 MiB logical backup volume.
-
-    Uses direct image names for the PostgreSQL Alpine writer, database, Velero, and the AWS plugin.
-
-    Exercises PR #591 vendor Backup/Restore policies, backup filtering, and restore resource modifiers, including a PostgreSQL marker recorded in restore_events.
-
-    Requires an EC build containing PR #591. Prototype DR backups are not compatible.
-
-    '
+    - Requires runtime builds containing the respective PRs; the EC version pin alone does not establish support.
+    - Requires an EC build containing PR #591. **Prototype DR backups are not compatible.**
