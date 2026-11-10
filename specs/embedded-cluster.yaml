@@ -5,6 +5,14 @@ metadata:
   name: embedded-cluster
 spec:
   version: 3.19.0-beta.1+k8s-1.37
+  unsupportedOverrides:
+    k0s: |
+      config:
+        spec:
+          workerProfiles:
+            - name: wp-a
+              values:
+                maxPods: 110
   roles:
     controller:
       name: controller
