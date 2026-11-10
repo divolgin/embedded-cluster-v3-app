@@ -10,7 +10,7 @@ spec:
       config:
         spec:
           workerProfiles:
-            - name: wp-a
+            - name: wp-b
               values:
                 maxPods: 110
   roles:
