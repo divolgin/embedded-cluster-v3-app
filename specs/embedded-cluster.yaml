@@ -4,7 +4,7 @@ kind: Config
 metadata:
   name: embedded-cluster
 spec:
-  version: 3.15.1-beta.1+k8s-1.36
+  version: 3.20.0+k8s-1.35
   roles:
     controller:
       name: controller
