@@ -5,16 +5,14 @@ metadata:
 spec:
   chart:
     name: alpine-sleeper
-    chartVersion: 0.16.5
+    chartVersion: 0.16.6
   releaseName: alpine-sleeper
   helmUpgradeFlags:
     - --timeout
     - 20m
   values:
-    gpu:
-      enabled: '{{repl ConfigOptionEquals "enable_gpu" "1" }}'
-      image: docker.io/library/postgres:17.11-bookworm
-      runtimeClassName: '{{repl ConfigOption "gpu_runtime_class" }}'
+    redis:
+      image: docker.io/library/redis:7.4-alpine
     message: '{{repl ConfigOption "message" }}'
     intervalSeconds: '{{repl ConfigOption "interval_seconds" }}'
     image: docker.io/library/postgres:17.11-alpine3.23
@@ -105,10 +103,8 @@ spec:
         LocalRegistryImagePullSecret: '{{repl LocalRegistryImagePullSecret }}'
         IdentityServiceClientSecret: '{{repl IdentityServiceClientSecret }}'
   builder:
-    # Render GPU mode to discover its image; postgres.image also includes Alpine.
-    gpu:
-      enabled: true
-      image: docker.io/library/postgres:17.11-bookworm
+    redis:
+      image: docker.io/library/redis:7.4-alpine
     postgres:
       image: docker.io/library/postgres:17.11-alpine3.23
     image: docker.io/library/postgres:17.11-alpine3.23

@@ -1,10 +1,9 @@
 message: "Hello from Alpine!"
 intervalSeconds: "10"
 image: docker.io/library/postgres:17.11-alpine3.23
-gpu:
-  enabled: false
-  image: docker.io/library/postgres:17.11-bookworm
-  runtimeClassName: ""
+redis:
+  image: docker.io/library/redis:7.4-alpine
+  storage: 128Mi
 
 # Manual Config screen fixtures; these are not consumed by the pod.
 configTest:

@@ -3,13 +3,12 @@ kind: Application
 metadata:
   name: alpine-ec-v3
 spec:
-  additionalNamespaces:
-    - gpu-operator
   title: Alpine Embedded Cluster v3
   statusInformers:
   - deployment/replicated
   - deployment/alpine-sleeper
   - deployment/alpine-postgres
+  - deployment/alpine-redis
   releaseNotes: 'Release B: updated configuration defaults, initializer expressions, and readonly transitions.
 
     Requires runtime builds containing the respective PRs; the EC version pin alone does not establish support.

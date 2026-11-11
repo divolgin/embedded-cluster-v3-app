@@ -1,0 +1,100 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: alpine-redis-data
+  labels:
+    app.kubernetes.io/name: alpine-redis
+    app.kubernetes.io/instance: alpine-sleeper
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ .Values.redis.storage | quote }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: alpine-redis
+spec:
+  selector:
+    app.kubernetes.io/name: alpine-redis
+    app.kubernetes.io/instance: alpine-sleeper
+  ports:
+    - name: redis
+      port: 6379
+      targetPort: redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-redis
+  labels:
+    app.kubernetes.io/name: alpine-redis
+    app.kubernetes.io/instance: alpine-sleeper
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alpine-redis
+      app.kubernetes.io/instance: alpine-sleeper
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alpine-redis
+        app.kubernetes.io/instance: alpine-sleeper
+      annotations:
+        backup.velero.io/backup-volumes: redis-data
+        pre.hook.backup.velero.io/container: redis
+        pre.hook.backup.velero.io/command: '["/bin/sh", "-ec", "test \"$(redis-cli --raw SAVE)\" = OK"]'
+        pre.hook.backup.velero.io/on-error: Fail
+        pre.hook.backup.velero.io/timeout: 2m
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: redis
+          image: {{ .Values.redis.image | quote }}
+          imagePullPolicy: IfNotPresent
+          args:
+            - redis-server
+            - --dir
+            - /data
+            - --dbfilename
+            - dump.rdb
+            - --appendonly
+            - "no"
+            - --save
+            - "60 1"
+            - --maxmemory
+            - 32mb
+            - --maxmemory-policy
+            - noeviction
+          ports:
+            - name: redis
+              containerPort: 6379
+          startupProbe:
+            exec:
+              command: ["/bin/sh", "-ec", "test \"$(redis-cli ping)\" = PONG"]
+            periodSeconds: 2
+            failureThreshold: 90
+          readinessProbe:
+            exec:
+              command: ["/bin/sh", "-ec", "test \"$(redis-cli ping)\" = PONG"]
+            periodSeconds: 5
+          volumeMounts:
+            - name: redis-data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+      volumes:
+        - name: redis-data
+          persistentVolumeClaim:
+            claimName: alpine-redis-data
