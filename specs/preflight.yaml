@@ -4,20 +4,51 @@ metadata:
   name: alpine-sleeper-preflight
 spec:
   collectors:
-    - data:
-        docString: Static success data for the always-passing smoke test.
-        name: preflight/smoke-test.txt
-        data: pass
+    - runPod:
+        name: passing-smoke-test
+        namespace: '{{repl Namespace }}'
+        timeout: 2m
+        podSpec:
+          restartPolicy: Never
+          containers:
+            - name: passing-smoke-test
+              image: docker.io/library/postgres:17.11-alpine3.23
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-ec"]
+              args:
+                - sleep 5; echo pass
+    - runPod:
+        name: failing-smoke-test
+        namespace: '{{repl Namespace }}'
+        timeout: 2m
+        podSpec:
+          restartPolicy: Never
+          containers:
+            - name: failing-smoke-test
+              image: docker.io/library/postgres:17.11-alpine3.23
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-ec"]
+              args:
+                - sleep 5; echo fail
   analyzers:
-    - docString: |
-        Title: Preflight smoke test
-        This check always passes using static data, so manual testing is never
-        blocked by application preflight requirements.
+    - docString: Passes after a 5-second delay.
       textAnalyze:
-        checkName: Preflight smoke test
-        fileName: preflight/smoke-test.txt
-        regex: '^pass$'
+        checkName: Passing preflight smoke test
+        fileName: passing-smoke-test/passing-smoke-test.log
+        regex: '(?m)^pass$'
         outcomes:
           - pass:
               when: "true"
-              message: Application preflight checks passed.
+              message: Application preflight smoke test passed.
+    - docString: |
+        Title: Failing preflight smoke test
+        This check intentionally fails after a 5-second delay to test
+        application preflight failure handling.
+      textAnalyze:
+        checkName: Failing preflight smoke test
+        fileName: failing-smoke-test/failing-smoke-test.log
+        regex: '(?m)^fail$'
+        outcomes:
+          - fail:
+              when: "true"
+              message: Intentional preflight failure for testing.
