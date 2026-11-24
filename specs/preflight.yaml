@@ -6,18 +6,31 @@ spec:
   collectors:
     - data:
         docString: Static success data for the always-passing smoke test.
-        name: preflight/smoke-test.txt
+        name: preflight/passing-smoke-test.txt
         data: pass
+    - data:
+        docString: Static failure data for the always-failing smoke test.
+        name: preflight/smoke-test.txt
+        data: fail
   analyzers:
-    - docString: |
-        Title: Preflight smoke test
-        This check always passes using static data, so manual testing is never
-        blocked by application preflight requirements.
+    - docString: Always passes using static data.
       textAnalyze:
-        checkName: Preflight smoke test
-        fileName: preflight/smoke-test.txt
+        checkName: Passing preflight smoke test
+        fileName: preflight/passing-smoke-test.txt
         regex: '^pass$'
         outcomes:
           - pass:
               when: "true"
-              message: Application preflight checks passed.
+              message: Application preflight smoke test passed.
+    - docString: |
+        Title: Failing preflight smoke test
+        This check intentionally fails using static data to test application
+        preflight failure handling.
+      textAnalyze:
+        checkName: Failing preflight smoke test
+        fileName: preflight/smoke-test.txt
+        regex: '^fail$'
+        outcomes:
+          - fail:
+              when: "true"
+              message: Intentional preflight failure for testing.
