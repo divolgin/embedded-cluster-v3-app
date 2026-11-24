@@ -4,32 +4,50 @@ metadata:
   name: alpine-sleeper-preflight
 spec:
   collectors:
-    - data:
-        docString: Static success data for the always-passing smoke test.
-        name: preflight/passing-smoke-test.txt
-        data: pass
-    - data:
-        docString: Static failure data for the always-failing smoke test.
-        name: preflight/smoke-test.txt
-        data: fail
+    - runPod:
+        name: passing-smoke-test
+        namespace: '{{repl Namespace }}'
+        timeout: 2m
+        podSpec:
+          restartPolicy: Never
+          containers:
+            - name: passing-smoke-test
+              image: docker.io/library/postgres:17.11-alpine3.23
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-ec"]
+              args:
+                - sleep 5; echo pass
+    - runPod:
+        name: failing-smoke-test
+        namespace: '{{repl Namespace }}'
+        timeout: 2m
+        podSpec:
+          restartPolicy: Never
+          containers:
+            - name: failing-smoke-test
+              image: docker.io/library/postgres:17.11-alpine3.23
+              imagePullPolicy: IfNotPresent
+              command: ["/bin/sh", "-ec"]
+              args:
+                - sleep 5; echo fail
   analyzers:
-    - docString: Always passes using static data.
+    - docString: Passes after a 5-second delay.
       textAnalyze:
         checkName: Passing preflight smoke test
-        fileName: preflight/passing-smoke-test.txt
-        regex: '^pass$'
+        fileName: passing-smoke-test/passing-smoke-test.log
+        regex: '(?m)^pass$'
         outcomes:
           - pass:
               when: "true"
               message: Application preflight smoke test passed.
     - docString: |
         Title: Failing preflight smoke test
-        This check intentionally fails using static data to test application
-        preflight failure handling.
+        This check intentionally fails after a 5-second delay to test
+        application preflight failure handling.
       textAnalyze:
         checkName: Failing preflight smoke test
-        fileName: preflight/smoke-test.txt
-        regex: '^fail$'
+        fileName: failing-smoke-test/failing-smoke-test.log
+        regex: '(?m)^fail$'
         outcomes:
           - fail:
               when: "true"
